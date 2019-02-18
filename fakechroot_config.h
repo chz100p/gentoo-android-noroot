@@ -1,0 +1,265 @@
+
+/*
+$CC -o libfakechroot.so -shared -fPIC -I. *.c -ldl
+*/
+
+#define HAVE___XSTAT 1
+#define HAVE___XSTAT64 1
+#define HAVE___LXSTAT 1
+#define HAVE___LXSTAT64 1
+
+// https://karkhaz.github.io/tuscan/android/fakechroot.html
+/* confdefs.h */
+#define PACKAGE_NAME "fakechroot"
+#define PACKAGE_TARNAME "fakechroot"
+#define PACKAGE_VERSION "2.17.2"
+#define PACKAGE_STRING "fakechroot 2.17.2"
+#define PACKAGE_BUGREPORT "dexter@debian.org"
+#define PACKAGE_URL "http://fakechroot.alioth.debian.org/"
+#define PACKAGE "fakechroot"
+#define VERSION "2.17.2"
+#define STDC_HEADERS 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_STAT_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_STRING_H 1
+#define HAVE_MEMORY_H 1
+#define HAVE_STRINGS_H 1
+#define HAVE_INTTYPES_H 1
+#define HAVE_STDINT_H 1
+#define HAVE_UNISTD_H 1
+#define HAVE_DLFCN_H 1
+#define LT_OBJDIR ".libs/"
+#define FAKECHROOT PACKAGE_VERSION
+#define HAVE___ALIGNOF__ 1
+#define HAVE___ATTRIBUTE__CONSTRUCTOR 1
+#define HAVE___ATTRIBUTE__SECTION_DATA_FAKECHROOT 1
+#define HAVE___ATTRIBUTE__VISIBILITY 1
+#define HAVE_LIBDL 1
+#define HAVE_DIRENT_H 1
+#define STDC_HEADERS 1
+#define HAVE_ALLOCA_H 1
+#define HAVE_DIRENT_H 1
+#define HAVE_DLFCN_H 1
+#define HAVE_ERRNO_H 1
+#define HAVE_FCNTL_H 1
+#define HAVE_FTW_H 1
+#define HAVE_PWD_H 1
+#define HAVE_SIGNAL_H 1
+#define HAVE_STDARG_H 1
+#define HAVE_STDINT_H 1
+#define HAVE_STDIO_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_STRING_H 1
+#define HAVE_SYS_INOTIFY_H 1
+#define HAVE_SYS_MOUNT_H 1
+#define HAVE_SYS_PARAM_H 1
+#define HAVE_SYS_SOCKET_H 1
+#define HAVE_SYS_STAT_H 1
+#define HAVE_SYS_STATFS_H 1
+#define HAVE_SYS_STATVFS_H 1
+#define HAVE_SYS_SYSCALL_H 1
+#define HAVE_SYS_TIMES_H 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_UN_H 1
+#define HAVE_SYS_VFS_H 1
+#define HAVE_SYS_WAIT_H 1
+#define HAVE_SYS_XATTR_H 1
+#define HAVE_UNISTD_H 1
+#define HAVE_UTIME_H 1
+#define HAVE_FTS_H 1
+#define HAVE_PTRDIFF_T 1
+#define HAVE_STRUCT__FTSENT_FTS_NAME 1
+#define HAVE___OPEN_2 1
+#define HAVE___OPENAT_2 1
+#define HAVE_ACCESS 1
+#define HAVE_ACCT 1
+#define HAVE_BIND 1
+#define HAVE_CHDIR 1
+#define HAVE_CHMOD 1
+#define HAVE_CHOWN 1
+#define HAVE_CHROOT 1
+#define HAVE_CLEARENV 1
+#define HAVE_CONNECT 1
+#define HAVE_CREAT 1
+#define HAVE_CREAT64 1
+#define HAVE_DLOPEN 1
+#define HAVE_EXECL 1
+#define HAVE_EXECLE 1
+#define HAVE_EXECLP 1
+#define HAVE_EXECV 1
+#define HAVE_EXECVE 1
+#define HAVE_EXECVP 1
+#define HAVE_FACCESSAT 1
+#define HAVE_FCHDIR 1
+#define HAVE_FCHMODAT 1
+#define HAVE_FCHOWNAT 1
+#define HAVE_FOPEN 1
+#define HAVE_FREOPEN 1
+#define HAVE_FSTAT 1
+#define HAVE_FSTAT64 1
+#define HAVE_FTS_CHILDREN 1
+#define HAVE_FTS_OPEN 1
+#define HAVE_FTS_READ 1
+#define HAVE_FTW 1
+#define HAVE_FTW64 1
+#define HAVE_GETCWD 1
+#define HAVE_GETPEERNAME 1
+#define HAVE_GETSOCKNAME 1
+#define HAVE_GETXATTR 1
+#define HAVE_INOTIFY_ADD_WATCH 1
+#define HAVE_LCHOWN 1
+#define HAVE_LGETXATTR 1
+#define HAVE_LINK 1
+#define HAVE_LINKAT 1
+#define HAVE_LISTXATTR 1
+#define HAVE_LLISTXATTR 1
+#define HAVE_LREMOVEXATTR 1
+#define HAVE_LSETXATTR 1
+#define HAVE_LSTAT 1
+#define HAVE_LSTAT64 1
+#define HAVE_MKDIR 1
+#define HAVE_MKDIRAT 1
+#define HAVE_MKDTEMP 1
+#define HAVE_MKFIFO 1
+#define HAVE_MKNOD 1
+#define HAVE_MKNODAT 1
+#define HAVE_MKSTEMP 1
+#define HAVE_MKSTEMP64 1
+#define HAVE_MKSTEMPS 1
+#define HAVE_MKTEMP 1
+#define HAVE_NFTW 1
+#define HAVE_NFTW64 1
+#define HAVE_OPEN 1
+#define HAVE_OPEN64 1
+#define HAVE_OPENAT 1
+#define HAVE_OPENAT64 1
+#define HAVE_OPENDIR 1
+#define HAVE_PATHCONF 1
+#define HAVE_POPEN 1
+#define HAVE_READLINK 1
+#define HAVE_READLINKAT 1
+#define HAVE_REALPATH 1
+#define HAVE_REMOVE 1
+#define HAVE_REMOVEXATTR 1
+#define HAVE_RENAME 1
+#define HAVE_RENAMEAT 1
+#define HAVE_RMDIR 1
+#define HAVE_SCANDIR 1
+#define HAVE_SCANDIR64 1
+#define HAVE_SETENV 1
+#define HAVE_SETXATTR 1
+#define HAVE_STAT 1
+#define HAVE_STAT64 1
+#define HAVE_STATFS 1
+#define HAVE_STATFS64 1
+#define HAVE_STATVFS 1
+#define HAVE_STATVFS64 1
+#define HAVE_STPCPY 1
+#define HAVE_STRLCPY 1
+#define HAVE_SYMLINK 1
+#define HAVE_SYMLINKAT 1
+#define HAVE_SYSTEM 1
+#define HAVE_TEMPNAM 1
+#define HAVE_TMPNAM 1
+#define HAVE_TRUNCATE 1
+#define HAVE_TRUNCATE64 1
+#define HAVE_UNLINK 1
+#define HAVE_UNLINKAT 1
+#define HAVE_UNSETENV 1
+#define HAVE_UTIME 1
+#define HAVE_UTIMENSAT 1
+#define HAVE_UTIMES 1
+#define HAVE_VFORK 1
+#define HAVE_ALLOCA_H 1
+#define HAVE_ALLOCA 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_SOCKET_H 1
+#define BIND_TYPE_RETURN int
+#define HAVE_BIND_TYPE_RETURN_INT 1
+#define BIND_TYPE_ARG1(_) int _
+#define HAVE_BIND_TYPE_ARG1_INT__ 1
+#define BIND_TYPE_ARG2(_) const struct sockaddr *_
+#define HAVE_BIND_TYPE_ARG2_CONST_STRUCT_SOCKADDR_P_ 1
+#define BIND_TYPE_ARG3(_) socklen_t _
+#define HAVE_BIND_TYPE_ARG3_SOCKLEN_T__ 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_SOCKET_H 1
+#define CONNECT_TYPE_RETURN int
+#define HAVE_CONNECT_TYPE_RETURN_INT 1
+#define CONNECT_TYPE_ARG1(_) int _
+#define HAVE_CONNECT_TYPE_ARG1_INT__ 1
+#define CONNECT_TYPE_ARG2(_) const struct sockaddr *_
+#define HAVE_CONNECT_TYPE_ARG2_CONST_STRUCT_SOCKADDR_P_ 1
+#define CONNECT_TYPE_ARG3(_) socklen_t _
+#define HAVE_CONNECT_TYPE_ARG3_SOCKLEN_T__ 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_SOCKET_H 1
+#define GETPEERNAME_TYPE_RETURN int
+#define HAVE_GETPEERNAME_TYPE_RETURN_INT 1
+#define GETPEERNAME_TYPE_ARG1(_) int _
+#define HAVE_GETPEERNAME_TYPE_ARG1_INT__ 1
+#define GETPEERNAME_TYPE_ARG2(_) struct sockaddr *_
+#define HAVE_GETPEERNAME_TYPE_ARG2_STRUCT_SOCKADDR_P_ 1
+#define GETPEERNAME_TYPE_ARG3(_) socklen_t *__restrict _
+#define HAVE_GETPEERNAME_TYPE_ARG3_SOCKLEN_T_P__RESTRICT__ 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_SOCKET_H 1
+#define GETSOCKNAME_TYPE_RETURN int
+#define HAVE_GETSOCKNAME_TYPE_RETURN_INT 1
+#define GETSOCKNAME_TYPE_ARG1(_) int _
+#define HAVE_GETSOCKNAME_TYPE_ARG1_INT__ 1
+#define GETSOCKNAME_TYPE_ARG2(_) struct sockaddr *_
+#define HAVE_GETSOCKNAME_TYPE_ARG2_STRUCT_SOCKADDR_P_ 1
+#define GETSOCKNAME_TYPE_ARG3(_) socklen_t *__restrict _
+#define HAVE_GETSOCKNAME_TYPE_ARG3_SOCKLEN_T_P__RESTRICT__ 1
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_STAT_H 1
+#define HAVE_FTS_H 1
+#define FTS_OPEN_TYPE_RETURN FTS *
+#define HAVE_FTS_OPEN_TYPE_RETURN_FTS_P 1
+#define FTS_OPEN_TYPE_ARG1(_) char * const *_
+#define HAVE_FTS_OPEN_TYPE_ARG1_CHAR_P_CONST_P_ 1
+#define FTS_OPEN_TYPE_ARG2(_) int _
+#define HAVE_FTS_OPEN_TYPE_ARG2_INT__ 1
+#define FTS_OPEN_TYPE_ARG3(_) int (*_)(const FTSENT **, const FTSENT **)
+#define HAVE_FTS_OPEN_TYPE_ARG3_INT__P___CONST_FTSENT_PP__CONST_FTSENT_PP_ 1
+#define HAVE_UNISTD_H 1
+#define READLINK_TYPE_RETURN ssize_t
+#define HAVE_READLINK_TYPE_RETURN_SSIZE_T 1
+#define READLINK_TYPE_ARG1(_) const char *_
+#define HAVE_READLINK_TYPE_ARG1_CONST_CHAR_P_ 1
+#define READLINK_TYPE_ARG2(_) char *_
+#define HAVE_READLINK_TYPE_ARG2_CHAR_P_ 1
+#define READLINK_TYPE_ARG3(_) size_t _
+#define HAVE_READLINK_TYPE_ARG3_SIZE_T__ 1
+#define HAVE_DIRENT_H 1
+#define SCANDIR_TYPE_RETURN int
+#define HAVE_SCANDIR_TYPE_RETURN_INT 1
+#define SCANDIR_TYPE_ARG1(_) const char *_
+#define HAVE_SCANDIR_TYPE_ARG1_CONST_CHAR_P_ 1
+#define SCANDIR_TYPE_ARG2(_) struct dirent ***_
+#define HAVE_SCANDIR_TYPE_ARG2_STRUCT_DIRENT_PPP_ 1
+#define SCANDIR_TYPE_ARG3(_) int(*_)(const struct dirent *)
+#define HAVE_SCANDIR_TYPE_ARG3_INT_P___CONST_STRUCT_DIRENT_P_ 1
+#define SCANDIR_TYPE_ARG4(_) int(*_)(const struct dirent **, const struct dirent **)
+#define HAVE_SCANDIR_TYPE_ARG4_INT_P___CONST_STRUCT_DIRENT_PP__CONST_STRUCT_DIRENT_PP_ 1
+#define HAVE_DIRENT_H 1
+#define SCANDIR64_TYPE_RETURN int
+#define HAVE_SCANDIR64_TYPE_RETURN_INT 1
+#define SCANDIR64_TYPE_ARG1(_) const char *_
+#define HAVE_SCANDIR64_TYPE_ARG1_CONST_CHAR_P_ 1
+#define SCANDIR64_TYPE_ARG2(_) struct dirent64 ***_
+#define HAVE_SCANDIR64_TYPE_ARG2_STRUCT_DIRENT64_PPP_ 1
+#define SCANDIR64_TYPE_ARG3(_) int(*_)(const struct dirent64 *)
+#define HAVE_SCANDIR64_TYPE_ARG3_INT_P___CONST_STRUCT_DIRENT64_P_ 1
+#define SCANDIR64_TYPE_ARG4(_) int(*_)(const struct dirent64 **, const struct dirent64 **)
+#define HAVE_SCANDIR64_TYPE_ARG4_INT_P___CONST_STRUCT_DIRENT64_PP__CONST_STRUCT_DIRENT64_PP_ 1
+#define HAVE_SYS_TIME_H 1
+#define UTIMES_TYPE_RETURN int
+#define HAVE_UTIMES_TYPE_RETURN_INT 1
+#define UTIMES_TYPE_ARG1(_) const char *_
+#define HAVE_UTIMES_TYPE_ARG1_CONST_CHAR_P_ 1
+#define UTIMES_TYPE_ARG2(_) const struct timeval _[2]
+#define HAVE_UTIMES_TYPE_ARG2_CONST_STRUCT_TIMEVAL___2_ 1
+
