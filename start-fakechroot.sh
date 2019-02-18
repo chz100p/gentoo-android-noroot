@@ -1,5 +1,5 @@
 #!/system/bin/sh
-export EPREFIX="/data/data/jackpal.androidterm/root/data/gentoo"
+export EPREFIX="/data/data/jackpal.androidterm/r/data/gentoo"
 unset LD_PRELOAD
 export LD_LIBRARY_PATH="\
 /data/gentoo/libx\
@@ -21,13 +21,13 @@ export TMPDIR="$EPREFIX/tmp"
 
 #"$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/bash" -c "echo prefix!"
 
-chroot_root="/data/data/jackpal.androidterm/root"
+chroot_root="/data/data/jackpal.androidterm/r"
 [[ -d "${chroot_root}/data/data/jackpal.androidterm" ]] || "$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/mkdir" -p "${chroot_root}/data/data/jackpal.androidterm" || exit 1
 [[ -e "${chroot_root}${chroot_root}" ]] || "$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/ln" -s "../../.." "${chroot_root}${chroot_root}" || exit 1
 
 #fakechroot_lib="libfakechroot.so libdl.so.2 libreadline.so.7 libc.so.6 libncurses.so.6"
 fakechroot_lib="libfakechroot.so libdl.so.2"
-fakechroot_paths=/data/data/jackpal.androidterm/root/data/gentoo/home/chz100p/lib
+fakechroot_paths=/data/data/jackpal.androidterm/r/data/gentoo/home/chz100p/lib
 
 fakechroot_paths="$fakechroot_paths${LD_LIBRARY_PATH:+${fakechroot_paths:+:}$LD_LIBRARY_PATH}"
 fakechroot_lib="$fakechroot_lib${LD_PRELOAD:+ $LD_PRELOAD}"
@@ -44,7 +44,7 @@ exec \
 
 exit 1
 
-/data/gentoo/sbin/ldconfig -C /data/data/jackpal.androidterm/root/data/gentoo/etc/ld.so.cache -f /data/data/jackpal.androidterm/root/data/gentoo/etc/ld.so.conf
+/data/gentoo/sbin/ldconfig -C /data/data/jackpal.androidterm/r/data/gentoo/etc/ld.so.cache -f /data/data/jackpal.androidterm/r/data/gentoo/etc/ld.so.conf
 exit 1
 
 
@@ -54,7 +54,7 @@ exit 1
 exit 1
 
 
-#!/data/data/jackpal.androidterm/root/data/gentoo/bin/sh
+#!/data/data/jackpal.androidterm/r/data/gentoo/bin/sh
 
 # fakechroot
 #

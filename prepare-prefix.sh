@@ -2,7 +2,7 @@
 
 JACKPAL="/data/data/jackpal.androidterm"
 JACKPAL_HOME="$JACKPAL/app_HOME"
-FAKECHROOT_BASE="$JACKPAL/root"
+FAKECHROOT_BASE="$JACKPAL/r"
 EPREFIX="$FAKECHROOT_BASE/data/gentoo"
 DOWNLOAD="/sdcard/Download"
 
@@ -52,10 +52,10 @@ local o="$1";shift
 local s="$1";shift
 local b="$1";shift
 "$EPREFIX/lib/ld-linux-armhf.so.3" \
- /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/cc1 \
+ /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/cc1 \
 -quiet \
--iprefix /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/ \
--isysroot /data/data/jackpal.androidterm/root/data/gentoo \
+-iprefix /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/ \
+-isysroot /data/data/jackpal.androidterm/r/data/gentoo \
 "$@" \
 "$s" \
 -dumpbase "$s" \
@@ -72,7 +72,7 @@ prfx_as() {
 local o="$1";shift
 local s="$1";shift
 "$EPREFIX/lib/ld-linux-armhf.so.3" \
- /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/as \
+ /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/as \
 -march=armv7-a \
 -mfloat-abi=hard \
 -mfpu=vfpv3-d16 \
@@ -84,9 +84,9 @@ local s="$1";shift
 prfx_ld() {
 local o="$1";shift
 "$EPREFIX/lib/ld-linux-armhf.so.3" \
- /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/ld \
--plugin /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/liblto_plugin.so \
--plugin-opt=/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/lto-wrapper \
+ /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/ld \
+-plugin /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/liblto_plugin.so \
+-plugin-opt=/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/lto-wrapper \
 -plugin-opt=-fresolution=./ccYJAv6r.res \
 -plugin-opt=-pass-through=-lgcc \
 -plugin-opt=-pass-through=-lgcc_s \
@@ -94,19 +94,19 @@ local o="$1";shift
 -plugin-opt=-pass-through=-lgcc \
 -plugin-opt=-pass-through=-lgcc_s \
 --eh-frame-hdr \
--dynamic-linker /data/data/jackpal.androidterm/root/data/gentoo/lib/ld-linux-armhf.so.3 \
+-dynamic-linker /data/data/jackpal.androidterm/r/data/gentoo/lib/ld-linux-armhf.so.3 \
 -X -m armelf_linux_eabi -pie \
 -o "$o" \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../Scrt1.o \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crti.o \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtbeginS.o \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0 \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../../armv7a-hardfloat-linux-gnueabi/lib \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../.. \
--L/data/data/jackpal.androidterm/root/data/gentoo/lib \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/lib \
---sysroot=/data/data/jackpal.androidterm/root/data/gentoo/../.. \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../Scrt1.o \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crti.o \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtbeginS.o \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0 \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../../armv7a-hardfloat-linux-gnueabi/lib \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../.. \
+-L/data/data/jackpal.androidterm/r/data/gentoo/lib \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/lib \
+--sysroot=/data/data/jackpal.androidterm/r/data/gentoo/../.. \
 "$@" \
 -lgcc \
 --as-needed \
@@ -117,17 +117,17 @@ local o="$1";shift
 --as-needed \
 -lgcc_s \
 --no-as-needed \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtendS.o \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crtn.o
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtendS.o \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crtn.o
 }
 
 prfx_ld_shared() {
 local o="$1";shift
 "$EPREFIX/lib/ld-linux-armhf.so.3" \
- /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/ld \
--plugin /data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/liblto_plugin.so \
--plugin-opt=/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/lto-wrapper \
--plugin-opt=-fresolution=/data/data/jackpal.androidterm/root/data/gentoo/tmp/ccoHVdeC.res \
+ /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/ld \
+-plugin /data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/liblto_plugin.so \
+-plugin-opt=/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../libexec/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/lto-wrapper \
+-plugin-opt=-fresolution=/data/data/jackpal.androidterm/r/data/gentoo/tmp/ccoHVdeC.res \
 -plugin-opt=-pass-through=-lgcc \
 -plugin-opt=-pass-through=-lgcc_s \
 -plugin-opt=-pass-through=-lc \
@@ -138,15 +138,15 @@ local o="$1";shift
 -X \
 -m armelf_linux_eabi \
 -o "$o" \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crti.o \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtbeginS.o \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0 \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../../armv7a-hardfloat-linux-gnueabi/lib \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../.. \
--L/data/data/jackpal.androidterm/root/data/gentoo/lib \
--L/data/data/jackpal.androidterm/root/data/gentoo/usr/lib \
---sysroot=/data/data/jackpal.androidterm/root/data/gentoo/../.. \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crti.o \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtbeginS.o \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0 \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../../armv7a-hardfloat-linux-gnueabi/lib \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../.. \
+-L/data/data/jackpal.androidterm/r/data/gentoo/lib \
+-L/data/data/jackpal.androidterm/r/data/gentoo/usr/lib \
+--sysroot=/data/data/jackpal.androidterm/r/data/gentoo/../.. \
 -ldl \
 "$@" \
 -lgcc \
@@ -158,8 +158,8 @@ local o="$1";shift
 --as-needed \
 -lgcc_s \
 --no-as-needed \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtendS.o \
-/data/data/jackpal.androidterm/root/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crtn.o
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/crtendS.o \
+/data/data/jackpal.androidterm/r/data/gentoo/usr/armv7a-hardfloat-linux-gnueabi/gcc-bin/7.3.0/../../../lib/gcc/armv7a-hardfloat-linux-gnueabi/7.3.0/../../../crtn.o
 }
 
 
