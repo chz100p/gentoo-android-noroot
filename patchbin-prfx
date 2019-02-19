@@ -1,0 +1,29 @@
+#!/data/data/jackpal.androidterm/gentoo/bin/bash
+##!/system/bin/sh
+##!/data/data/jackpal.androidterm/app_HOME/bin/sh
+
+eprefix="/data/data/jackpal.androidterm/gentoo"
+prfx="/sdcard/prfx"
+prfx_orig="/data/gentoo"
+
+if [[ $# = 4 ]] ; then
+ [[ ${#3} = ${#4} ]]  || exit 1
+ prfx_orig="$3"
+ prfx="$4"
+fi
+
+od -A n -t x1 -v "$1" \
+ | tr -Cd '0123456789abcdef ' \
+ | sed -e "s:$(echo -n "$prfx_orig" | od -A n -t x1 -v | tr -Cd '0123456789abcdef ' ):$(echo -n "$prfx" | od -A n -t x1 -v | tr -Cd '0123456789abcdef ' ):g" \
+       -e "s:.\(..\):\\\\\\\\x\1:g" \
+       -e "s:.\{$(( 5 * 256 ))\}:\0\n:g" \
+ | xargs -n 1 echo -n -e > "$2"
+
+exit 0
+
+#
+ | xargs -n 1 echo -n -e > "$2"
+
+#
+ | while read b; do echo -n -e "$b"; done > "$2"
+

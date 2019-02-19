@@ -1,0 +1,13 @@
+#!/data/data/jackpal.androidterm/gentoo/bin/sh
+##!/system/bin/sh
+##!/data/data/jackpal.androidterm/app_HOME/bin/sh
+
+eprefix="/data/data/jackpal.androidterm/gentoo"
+prfx="/sdcard/prfx"
+prfx_orig="/data/gentoo"
+
+ld_linux_prfx="$eprefix/lib/ld-linux-armhf.so.3.prfx"
+ld_linux_orig="$prfx_orig/lib/ld-linux-armhf.so.3"
+
+exec patchelf --set-interpreter "$ld_linux_prfx" "$1"
+
