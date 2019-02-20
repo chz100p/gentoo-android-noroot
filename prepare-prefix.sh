@@ -32,17 +32,30 @@ if [[ ! -e "${eprefix}/bin/bash" ]]; then
   fi
   mkdir -p "${eprefix}" || exit 1
   tar x -C "${eprefix}/.." -f "$f" || exit 1
-  if [[ ! -e "${eprefix}/tmp" ]]; then
-    mkdir -p "${eprefix}/tmp" || exit 1
-  fi
 fi
 
 #
 prfx="/sdcard/prfx"
 prfx_orig="/data/gentoo"
-
 ld_linux_prfx="${root}/l/l"
-ld_linux_orig="$prfx_orig/lib/ld-linux-armhf.so.3"
+ld_linux_orig="${prfx_orig}/lib/ld-linux-armhf.so.3"
+
+[[ -e "${root}${root}" ]] || ln -s "../../.." "${root}${root}" || exit 1
+
+[[ -e "${eprefix}/home" ]] || mkdir -p "${eprefix}/home" || exit 1
+[[ -e "${eprefix}/tmp" ]] || mkdir -p "${eprefix}/tmp" || exit 1
+[[ -e "${root}/l" ]] || mkdir -p "${root}/l" || exit 1
+[[ -e "${prfx}/etc" ]] || mkdir -p "${prfx}/etc" || exit 1
+
+[[ -e "${root}/proc" ]] || ln -s "/proc" "${root}/proc" || exit 1
+[[ -e "${root}/sys" ]] || ln -s "/sys" "${root}/sys" || exit 1
+[[ -e "${root}/dev" ]] || mkdir -p "${root}/dev" || exit 1
+[[ -e "${root}/dev/null" ]] || ln -s "/dev/null" "${root}/dev/null" || exit 1
+[[ -e "${root}/dev/random" ]] || ln -s "/dev/random" "${root}/dev/random" || exit 1
+[[ -e "${root}/dev/fd" ]] || ln -s "/proc/self/fd" "${root}/dev/fd" || exit 1
+for d in bin etc home lib sbin tmp usr var; do
+  [[ -e "${root}/${d}" ]] || ln -s "${eprefix#/}/${d}" "${root}/${d}" || exit 1
+done
 
 prfx_patchelf() {
  if [[ $(patchelf --print-interpreter "$1") = "$ld_linux_orig" ]] ; then
@@ -74,19 +87,10 @@ prfx_patchtxt() {
  fi
 }
 
-[[ -e "$prfx/etc" ]] || mkdir -p "$prfx/etc" || exit 1
-
-[[ -e "$root/l" ]] || mkdir -p "$root/l" || exit 1
 [[ -e "${ld_linux_prfx}" ]] \
  || prfx_patchbin "${ld_linux_orig}" "${ld_linux_prfx}" "/data/gentoo/etc" "/sdcard/prfx/etc" \
  || exit 1
 [[ -x "$ld_linux_prfx" ]] || chmod +x "$ld_linux_prfx" || exit 1
-
-[[ -e "${eprefix}/tmp" ]] || mkdir -p "${eprefix}/tmp" || exit 1
-[[ -e "$home/bin" ]] || mkdir -p "$home/bin" || exit 1
-
-prfx_patchelf "${eprefix}/bin/bash"
-prfx_patchelf "${eprefix}/bin/ls"
 
 prfx_patchtxt "${eprefix}/etc/ld.so.conf"
 ${eprefix}/sbin/ldconfig -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
@@ -94,10 +98,9 @@ cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
 
 find ${eprefix} -type l ! -exec test -e {} \; -print | while read f ; do
  l="$(readlink -n "$f")"
- if echo "$l" | grep -q "$prfx_orig" ; then
+ if [[ ${l#${prfx_orig}} != ${l} ]] ; then
   echo "$f"
-  l1=$(echo -n "$l" | sed -e "s:$prfx_orig:${eprefix}/:")
-  ln -sf "$l1" "$f" || exit 1
+  ln -sf "${eprefix}${l#${prfx_orig}}" "$f" || exit 1
  fi
 done
 
