@@ -27,7 +27,7 @@ if [[ ! -e "${jackpal_home}/bin/sh" ]]; then
 fi
 
 if [[ $1 < 2 ]]; then
-  shift
+  [[ $# > 0 ]] && shift
   exec "$bb" sh $0 2 "$@"
 fi
 
@@ -130,22 +130,29 @@ if [[ ! -e "$prfx/usr/share/misc/magic.mgc" ]] ; then
  cp "${eprefix}/usr/share/misc/magic.mgc" "$prfx/usr/share/misc/magic.mgc" || exit 1
 fi
 
+prfx_patchelf "${eprefix}/bin/bash"
+prfx_patchelf "${eprefix}/bin/sed"
+prfx_patchelf "${eprefix}/bin/grep"
+prfx_patchelf "${eprefix}/bin/tr"
+prfx_patchelf "${eprefix}/bin/cat"
+prfx_patchelf "${eprefix}/bin/head"
+prfx_patchelf "${eprefix}/bin/tail"
+prfx_patchelf "${eprefix}/bin/rm"
+prfx_patchelf "${eprefix}/bin/mv"
+prfx_patchelf "${eprefix}/bin/cp"
+prfx_patchelf "${eprefix}/bin/ln"
+prfx_patchelf "${eprefix}/bin/chmod"
+prfx_patchelf "${eprefix}/bin/mkdir"
+prfx_patchelf "${eprefix}/bin/rmdir"
+prfx_patchelf "${eprefix}/bin/ls"
+prfx_patchelf "${eprefix}/bin/readlink"
+prfx_patchelf "${eprefix}/usr/bin/find"
+prfx_patchelf "${eprefix}/usr/bin/xargs"
+prfx_patchelf "${eprefix}/usr/bin/strings"
+prfx_patchelf "${eprefix}/usr/bin/od"
+prfx_patchelf "${eprefix}/usr/bin/test"
+prfx_patchelf "${eprefix}/usr/bin/realpath"
 prfx_patchelf "${eprefix}/usr/bin/file"
-
-find "${eprefix}/bin" -type f \
-| while read f; do
-ls -l "${eprefix}/usr/lib/libmagic.so.1"
-  if [[ $("${eprefix}/usr/bin/file" -b "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
-    prfx_patchelf "$f"
-  fi
-done
-
-find "${eprefix}/usr/bin" -type f \
-| while read f; do
-  if [[ $("${eprefix}/usr/bin/file" -b "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
-    prfx_patchelf "$f"
-  fi
-done
 fi
 
 if [[ $1 < 3 ]]; then
