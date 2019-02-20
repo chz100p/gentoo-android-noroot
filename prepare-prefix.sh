@@ -124,10 +124,10 @@ if [[ ! -e "$prfx/usr/share/misc/magic.mgc" ]] ; then
  cp "${eprefix}/usr/share/misc/magic.mgc" "$prfx/usr/share/misc/magic.mgc" || exit 1
 fi
 
-[[ -e "${eprefix}/usr/bin/armv7a-hardfloat-linux-gnueabi-strings" ]] \
-|| ln -sf "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/bin/strings" "${eprefix}/usr/bin/armv7a-hardfloat-linux-gnueabi-strings" \
+[[ -e "${eprefix}/usr/bin/strings" ]] \
+|| ln -sf "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/strings" "${eprefix}/usr/bin/strings" \
 || exit 1
-prfx_patchelf "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/bin/strings"
+prfx_patchelf "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/strings"
 
 prfx_patchelf "${eprefix}/bin/bash"
 prfx_patchelf "${eprefix}/bin/sed"
@@ -154,7 +154,7 @@ prfx_patchelf "${eprefix}/usr/bin/file"
 fi
 
 if [[ $1 < 3 ]]; then
-  shift
+  [[ $# > 0 ]] && shift
   TMPDIR="${eprefix}/tmp" \
   LD_PRELOAD= \
   LD_LIBRARY_PATH= \
