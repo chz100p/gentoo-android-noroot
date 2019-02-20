@@ -6,10 +6,10 @@ root="${jackpal}/r"
 eprefix="${root}/data/gentoo"
 download="/sdcard/Download"
 
-export PATH="/system/bin"
-hash -r
-
 if [[ ! -e "${jackpal_home}/bin/sh" ]]; then
+  export PATH="/system/bin"
+  hash -r
+
   bb="${jackpal_home}/bin/busybox"
   if [[ ! -e $bb ]]; then
     mkdir -p "${jackpal_home}/bin" || exit 1
@@ -19,51 +19,23 @@ if [[ ! -e "${jackpal_home}/bin/sh" ]]; then
   chmod 755 "$bb" || exit 1
   #"$bb" --install -s "${jackpal_home}/bin" || exit 1
   "$bb" --list | "$bb" xargs -n 1 -I {} "$bb" ln -s busybox "${jackpal_home}/bin/{}" || exit 1
-fi
 
-export PATH="${jackpal_home}/bin:/system/bin"
-hash -r
-
-if [[ ! -e "${eprefix}/bin/bash" ]]; then
-  f="${download}/prefix-stage3-armv7a_hardfp-latest.tar.xz"
-  if [[ ! -e $f ]]; then
-    uri="http://distfiles.gentoo.org/experimental/prefix/arm/prefix-stage3-armv7a_hardfp-latest.tar.xz"
-    curl -k -L -o "$f" "$uri" || exit 1
+  if [[ ! -e "${jackpal_home}/bin/patchelf" ]]; then
+    "$bb" cp "${download}/patchelf" "${jackpal_home}/bin/patchelf" || exit 1
+    "$bb" chmod +x "${jackpal_home}/bin/patchelf" || exit 1
   fi
-  mkdir -p "${eprefix}" || exit 1
-  tar x -C "${eprefix}/.." -f "$f" || exit 1
+
+  exec "$bb" sh $0 "$@"
 fi
 
-#
+##!busybox sh
 prfx="/sdcard/prfx"
 prfx_orig="/data/gentoo"
 ld_linux_prfx="${root}/l/l"
 ld_linux_orig="${prfx_orig}/lib/ld-linux-armhf.so.3"
 
-[[ -e "${root}${root}" ]] || ln -s "../../.." "${root}${root}" || exit 1
-
-[[ -e "${eprefix}/home" ]] || mkdir -p "${eprefix}/home" || exit 1
-[[ -e "${eprefix}/tmp" ]] || mkdir -p "${eprefix}/tmp" || exit 1
-[[ -e "${root}/l" ]] || mkdir -p "${root}/l" || exit 1
-[[ -e "${prfx}/etc" ]] || mkdir -p "${prfx}/etc" || exit 1
-
-[[ -e "${root}/proc" ]] || ln -s "/proc" "${root}/proc" || exit 1
-[[ -e "${root}/sys" ]] || ln -s "/sys" "${root}/sys" || exit 1
-[[ -e "${root}/dev" ]] || mkdir -p "${root}/dev" || exit 1
-[[ -e "${root}/dev/null" ]] || ln -s "/dev/null" "${root}/dev/null" || exit 1
-[[ -e "${root}/dev/random" ]] || ln -s "/dev/random" "${root}/dev/random" || exit 1
-[[ -e "${root}/dev/fd" ]] || ln -s "/proc/self/fd" "${root}/dev/fd" || exit 1
-for d in bin etc home lib sbin tmp usr var; do
-  [[ -e "${root}/${d}" ]] || ln -s "${eprefix#/}/${d}" "${root}/${d}" || exit 1
-done
-
-prfx_patchelf() {
- if [[ $(patchelf --print-interpreter "$1") = "$ld_linux_orig" ]] ; then
-  patchelf --set-interpreter "$ld_linux_prfx" "$1" || exit 1
- fi
-}
-
 prfx_patchbin() {
+echo "$@"
 local prfx="/sdcard/prfx"
 local prfx_orig="/data/gentoo"
 
@@ -83,18 +55,103 @@ od -A n -t x1 -v "$1" \
 
 prfx_patchtxt() {
  if grep -q "$prfx_orig" "$1" ; then
+  echo "$@"
   sed -i -e "s:$prfx_orig:${eprefix}:g" "$1" || exit 1
  fi
 }
+
+prfx_patchelf() {
+ if [[ $(patchelf --print-interpreter "$1") = "$ld_linux_orig" ]] ; then
+  echo "$@"
+  patchelf --set-interpreter "$ld_linux_prfx" "$1" || exit 1
+ fi
+}
+
+if [[ ! -e "${eprefix}/bin/bash" ]]; then
+  export PATH="${jackpal_home}/bin:/system/bin"
+  hash -r
+
+  f="${download}/prefix-stage3-armv7a_hardfp-latest.tar.xz"
+  if [[ ! -e $f ]]; then
+    uri="http://distfiles.gentoo.org/experimental/prefix/arm/prefix-stage3-armv7a_hardfp-latest.tar.xz"
+    curl -k -L -o "$f" "$uri" || exit 1
+  fi
+  mkdir -p "${eprefix}" || exit 1
+  tar x -C "${eprefix}/.." -f "$f" || exit 1
+fi
+
+if [[ ! -x "$ld_linux_prfx" ]]; then
+  export PATH="${jackpal_home}/bin:/system/bin"
+  hash -r
+
+[[ -e "${root}${root}" ]] || ln -s "../../.." "${root}${root}" || exit 1
+
+[[ -e "${eprefix}/home" ]] || mkdir -p "${eprefix}/home" || exit 1
+[[ -e "${eprefix}/tmp" ]] || mkdir -p "${eprefix}/tmp" || exit 1
+[[ -e "${root}/l" ]] || mkdir -p "${root}/l" || exit 1
+[[ -e "${prfx}/etc" ]] || mkdir -p "${prfx}/etc" || exit 1
+
+[[ -e "${root}/proc" ]] || ln -s "/proc" "${root}/proc" || exit 1
+[[ -e "${root}/sys" ]] || ln -s "/sys" "${root}/sys" || exit 1
+[[ -e "${root}/dev" ]] || mkdir -p "${root}/dev" || exit 1
+[[ -e "${root}/dev/null" ]] || ln -s "/dev/null" "${root}/dev/null" || exit 1
+[[ -e "${root}/dev/random" ]] || ln -s "/dev/random" "${root}/dev/random" || exit 1
+[[ -e "${root}/dev/fd" ]] || ln -s "/proc/self/fd" "${root}/dev/fd" || exit 1
+for d in bin etc home lib sbin tmp usr var; do
+  [[ -e "${root}/${d}" ]] || ln -s "${eprefix#/}/${d}" "${root}/${d}" || exit 1
+done
+
+prfx_patchtxt "${eprefix}/etc/ld.so.conf"
+${eprefix}/sbin/ldconfig -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
+cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
 
 [[ -e "${ld_linux_prfx}" ]] \
  || prfx_patchbin "${ld_linux_orig}" "${ld_linux_prfx}" "/data/gentoo/etc" "/sdcard/prfx/etc" \
  || exit 1
 [[ -x "$ld_linux_prfx" ]] || chmod +x "$ld_linux_prfx" || exit 1
 
-prfx_patchtxt "${eprefix}/etc/ld.so.conf"
-${eprefix}/sbin/ldconfig -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
-cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
+if [[ ! -e "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" ]] ; then
+ echo "${eprefix}/usr/lib/libmagic.so.1.0.0"
+ mv "${eprefix}/usr/lib/libmagic.so.1.0.0" "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" || exit 1
+ prfx_patchbin \
+  "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" \
+  "${eprefix}/usr/lib/libmagic.so.1.0.0" \
+ || exit 1
+fi
+if [[ ! -e "$prfx/usr/share/misc/magic.mgc" ]] ; then
+ echo "$prfx/usr/share/misc/magic.mgc"
+ mkdir -p "$prfx/usr/share/misc" || exit 1
+ cp "${eprefix}/usr/share/misc/magic.mgc" "$prfx/usr/share/misc/magic.mgc" || exit 1
+fi
+
+prfx_patchelf "${eprefix}/usr/bin/file"
+
+find "${eprefix}/bin" -type f \
+| while read f; do
+  if [[ $("${eprefix}/usr/bin/file" -b "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
+    prfx_patchelf "$f"
+  fi
+done
+
+find "${eprefix}/usr/bin" -type f \
+| while read f; do
+  if [[ $("${eprefix}/usr/bin/file" -b "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
+    prfx_patchelf "$f"
+  fi
+done
+
+  TMPDIR="${eprefix}/tmp" \
+  LD_PRELOAD= \
+  LD_LIBRARY_PATH= \
+  exec "${eprefix}/bin/bash" $0 "$@"
+fi
+
+##!/data/gentoo/bin/bash
+export PATH="${eprefix}/usr/bin:${eprefix}/bin:${jackpal_home}/bin"
+hash -r
+export TMPDIR="${eprefix}/tmp"
+unset LD_PRELOAD
+unset LD_LIBRARY_PATH
 
 find ${eprefix} -type l ! -exec test -e {} \; -print | while read f ; do
  l="$(readlink -n "$f")"
@@ -104,30 +161,37 @@ find ${eprefix} -type l ! -exec test -e {} \; -print | while read f ; do
  fi
 done
 
-if [[ ! -e "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" ]] ; then
- mv "${eprefix}/usr/lib/libmagic.so.1.0.0" "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" || exit 1
- prfx_patchbin \
-  "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" \
-  "${eprefix}/usr/lib/libmagic.so.1.0.0" \
- || exit 1
-fi
-if [[ ! -e "$prfx/usr/share/misc/magic.mgc" ]] ; then
- mkdir -p "$prfx/usr/share/misc" || exit 1
- cp "${eprefix}/usr/share/misc/magic.mgc" "$prfx/usr/share/misc/magic.mgc" || exit 1
-fi
-
 ##find usr/bin -type l | while read f;do if [[ $(basename $(readlink $f)) = "python-exec2" && -e "usr/lib/python-exec/python2.7/$(basename $f)" ]]; then echo $f; ln -sf "../lib/python-exec/python2.7/$(basename "$f")" "$f";fi;done^C
 ##find usr/sbin -type l | while read f;do if [[ $(basename $(readlink $f)) = "python-exec2" && -e "usr/lib/python-exec/python2.7/$(basename $f)" ]]; then echo $f; ln -sf "../lib/python-exec/python2.7/$(basename "$f")" "$f";fi;done^C
 
 #find . -type f ! -path './usr/portage/*' ! -path './home/*' -print | while read f; do [[ $(file -b "$f") = *text* ]] && grep -q /data/gentoo "$f" && echo "$f"; done | tee log
 
 ##find 'usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/' -type f | while read f;do if [[ $(patchelf --print-interpreter "$f") = "/data/gentoo/lib/ld-linux-armhf.so.3" ]]; then echo $f; patchbin-prfx "$f" "${f}.patched" "/data/gentoo/lib/ld-linux-armhf.so.3" "/data/data/jackpal.androidterm/g/ld-" || exit 1; mv "${f}.patched" "$f" || exit 1; chmod +x "$f" || exit 1; fi; done
-##find . -type d -path ./usr/portage -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f | while read f;do if [[ $(file "$f") = *text* && $(head -n 1 "$f") = '#!'*/data/gentoo/* ]];then echo $f;patchtxt-prfx "$f";fi;done
+find "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/" -type f \
+| while read f;do
+  if strings "$f" | grep -q "${ld_linux_orig}"; then
+    echo $f
+    prfx_patchbin "$f" "${f}.patched" "${ld_linux_orig}" "${ld_linux_prfx}" || exit 1
+    mv "${f}.patched" "$f" || exit 1
+    chmod +x "$f" || exit 1
+  fi
+done
+
 ##find . -type d -path ./usr/portage -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f | while read f;do if [[ $(file "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]];then echo $f;patchelf-prfx "$f";fi;done
+##find . -type d -path ./usr/portage -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f | while read f;do if [[ $(file "$f") = *text* && $(head -n 1 "$f") = '#!'*/data/gentoo/* ]];then echo $f;patchtxt-prfx "$f";fi;done
+find "${eprefix}" -type d -path "${eprefix}/usr/portage" -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f \
+| while read f; do
+  ff="$(file -b "$f")"
+  if [[ $ff = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
+    patchelf-prfx "$f"
+  elif [[ $ff = *text* && $(head -n 1 "$f") = '#!'*/data/gentoo/* ]]; then
+    prfx_patchtxt "$f"
+  fi
+done
 
 exit 0
 
-
+\
 
 #
 ld_linux="${eprefix}/lib/ld-linux-armhf.so.3"
