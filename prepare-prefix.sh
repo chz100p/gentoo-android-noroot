@@ -200,7 +200,7 @@ find "${eprefix}" -type d -path "${eprefix}/usr/portage" -prune -o -type f -name
 | while read f; do
   ff="$(file -b "$f")"
   if [[ $ff = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
-    patchelf-prfx "$f"
+    prfx_patchelf "$f"
   elif [[ $ff = *text* && $(head -n 1 "$f") = '#!'*/data/gentoo/* ]]; then
     prfx_patchtxt "$f"
   fi
