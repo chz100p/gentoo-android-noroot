@@ -26,12 +26,6 @@ if [[ ! -e "${jackpal_home}/bin/sh" ]]; then
   fi
 fi
 
-if [[ $1 < 2 ]]; then
-  [[ $# > 0 ]] && shift
-  exec "$bb" sh $0 2 "$@"
-fi
-
-##!busybox sh
 prfx="/sdcard/prfx"
 prfx_orig="/data/gentoo"
 ld_linux_prfx="${root}/l/l"
@@ -80,7 +74,7 @@ if [[ ! -e "${eprefix}/bin/bash" ]]; then
     curl -k -L -o "$f" "$uri" || exit 1
   fi
   mkdir -p "${eprefix}" || exit 1
-  tar x -C "${eprefix}/.." -f "$f" || exit 1
+  EXTRACT_UNSAFE_SYMLINKS=1 tar x -C "${eprefix}/.." -f "$f" || exit 1
 fi
 
 if [[ ! -x "$ld_linux_prfx" ]]; then
@@ -105,7 +99,7 @@ for d in bin etc home lib sbin tmp usr var; do
 done
 
 prfx_patchtxt "${eprefix}/etc/ld.so.conf"
-${eprefix}/sbin/ldconfig -x -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
+${eprefix}/sbin/ldconfig -X -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
 cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
 
 [[ -e "${ld_linux_prfx}" ]] \
@@ -130,6 +124,11 @@ if [[ ! -e "$prfx/usr/share/misc/magic.mgc" ]] ; then
  cp "${eprefix}/usr/share/misc/magic.mgc" "$prfx/usr/share/misc/magic.mgc" || exit 1
 fi
 
+[[ -e "${eprefix}/usr/bin/armv7a-hardfloat-linux-gnueabi-strings" ]] \
+|| ln -sf "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/bin/strings" "${eprefix}/usr/bin/armv7a-hardfloat-linux-gnueabi-strings" \
+|| exit 1
+prfx_patchelf "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/bin/strings"
+
 prfx_patchelf "${eprefix}/bin/bash"
 prfx_patchelf "${eprefix}/bin/sed"
 prfx_patchelf "${eprefix}/bin/grep"
@@ -148,7 +147,6 @@ prfx_patchelf "${eprefix}/bin/ls"
 prfx_patchelf "${eprefix}/bin/readlink"
 prfx_patchelf "${eprefix}/usr/bin/find"
 prfx_patchelf "${eprefix}/usr/bin/xargs"
-prfx_patchelf "${eprefix}/usr/bin/strings"
 prfx_patchelf "${eprefix}/usr/bin/od"
 prfx_patchelf "${eprefix}/usr/bin/test"
 prfx_patchelf "${eprefix}/usr/bin/realpath"
