@@ -178,7 +178,7 @@ find ${eprefix} -type l ! -exec test -e {} \; -print | while read f ; do
  fi
 done
 
-find "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/" -type f \
+find "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/" -type f -perm -200 -print \
 | while read f;do
   if strings "$f" | grep -q "${ld_linux_orig}"; then
     prfx_patchbin "$f" "${f}.patched" "${ld_linux_orig}" "${ld_linux_prfx}" || exit 1
@@ -187,7 +187,7 @@ find "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/" -type f 
   fi
 done
 
-find "${eprefix}" -path "${eprefix}/usr/portage" -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f -print \
+find "${eprefix}" -path "${eprefix}/usr/portage" -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f -perm -200 -print \
 | while read f; do
   ff="$(file -b "$f")"
   if [[ $ff = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
