@@ -6,11 +6,11 @@ root="${jackpal}/r"
 eprefix="${root}/data/gentoo"
 download="/sdcard/Download"
 
+bb="${jackpal_home}/bin/busybox"
 if [[ ! -e "${jackpal_home}/bin/sh" ]]; then
   export PATH="/system/bin"
   hash -r
 
-  bb="${jackpal_home}/bin/busybox"
   if [[ ! -e $bb ]]; then
     mkdir -p "${jackpal_home}/bin" || exit 1
     uri="https://busybox.net/downloads/binaries/1.28.1-defconfig-multiarch/busybox-armv7l"
@@ -24,8 +24,11 @@ if [[ ! -e "${jackpal_home}/bin/sh" ]]; then
     "$bb" cp "${download}/patchelf" "${jackpal_home}/bin/patchelf" || exit 1
     "$bb" chmod +x "${jackpal_home}/bin/patchelf" || exit 1
   fi
+fi
 
-  exec "$bb" sh $0 "$@"
+if [[ $1 < 2 ]]; then
+  shift
+  exec "$bb" sh $0 2 "$@"
 fi
 
 ##!busybox sh
@@ -102,7 +105,7 @@ for d in bin etc home lib sbin tmp usr var; do
 done
 
 prfx_patchtxt "${eprefix}/etc/ld.so.conf"
-${eprefix}/sbin/ldconfig -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
+${eprefix}/sbin/ldconfig -x -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
 cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
 
 [[ -e "${ld_linux_prfx}" ]] \
@@ -131,6 +134,7 @@ prfx_patchelf "${eprefix}/usr/bin/file"
 
 find "${eprefix}/bin" -type f \
 | while read f; do
+ls -l "${eprefix}/usr/lib/libmagic.so.1"
   if [[ $("${eprefix}/usr/bin/file" -b "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
     prfx_patchelf "$f"
   fi
@@ -142,11 +146,14 @@ find "${eprefix}/usr/bin" -type f \
     prfx_patchelf "$f"
   fi
 done
+fi
 
+if [[ $1 < 3 ]]; then
+  shift
   TMPDIR="${eprefix}/tmp" \
   LD_PRELOAD= \
   LD_LIBRARY_PATH= \
-  exec "${eprefix}/bin/bash" $0 "$@"
+  exec "${eprefix}/bin/bash" $0 3 "$@"
 fi
 
 ##!/data/gentoo/bin/bash
