@@ -83,7 +83,7 @@ if [[ ! -x "$ld_linux_prfx" ]]; then
 
 [[ -e "${root}${root}" ]] || ln -s "../../.." "${root}${root}" || exit 1
 
-[[ -e "${eprefix}/home" ]] || mkdir -p "${eprefix}/home" || exit 1
+[[ -e "${root}/home" ]] || mkdir -p "${root}/home" || exit 1
 [[ -e "${eprefix}/tmp" ]] || mkdir -p "${eprefix}/tmp" || exit 1
 [[ -e "${root}/l" ]] || mkdir -p "${root}/l" || exit 1
 [[ -e "${prfx}/etc" ]] || mkdir -p "${prfx}/etc" || exit 1
@@ -94,7 +94,7 @@ if [[ ! -x "$ld_linux_prfx" ]]; then
 [[ -e "${root}/dev/null" ]] || ln -s "/dev/null" "${root}/dev/null" || exit 1
 [[ -e "${root}/dev/random" ]] || ln -s "/dev/random" "${root}/dev/random" || exit 1
 [[ -e "${root}/dev/fd" ]] || ln -s "/proc/self/fd" "${root}/dev/fd" || exit 1
-for d in bin etc home lib sbin tmp usr var; do
+for d in bin etc lib sbin tmp usr var; do
   [[ -e "${root}/${d}" ]] || ln -s "${eprefix#/}/${d}" "${root}/${d}" || exit 1
 done
 

@@ -1,33 +1,30 @@
 #!/system/bin/sh
-export EPREFIX="/data/data/jackpal.androidterm/r/data/gentoo"
+root="/data/data/jackpal.androidterm/r"
+export HOME="${root}/home/chz100p"
+ld_linux="${root}/l/l"
+export EPREFIX="${root}/data/gentoo"
 unset LD_PRELOAD
 export LD_LIBRARY_PATH="\
-/data/gentoo/libx\
-:/data/gentoo/usr/libx\
-:/data/gentoo/usr/lib/binutils/armv7a-hardfloat-linux-gnueabi/2.30x\
 :$EPREFIX/lib\
 :$EPREFIX/usr/lib\
 :$EPREFIX/usr/lib/binutils/armv7a-hardfloat-linux-gnueabi/2.30\
 "
 export PATH="\
-/data/gentoo/binx\
-:/data/gentoo/usr/binx\
+$HOME/bin\
 :$EPREFIX/usr/bin\
 :$EPREFIX/bin\
 "
 export TMPDIR="$EPREFIX/tmp"
 
-[[ -e $TMPDIR ]] || "$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/mkdir" -p "$TMPDIR" || exit 1
+[[ -e $TMPDIR ]] || "$EPREFIX/bin/mkdir" -p "$TMPDIR" || exit 1
 
-#"$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/bash" -c "echo prefix!"
+#"$EPREFIX/bin/bash" -c "echo prefix!"
 
-chroot_root="/data/data/jackpal.androidterm/r"
-[[ -d "${chroot_root}/data/data/jackpal.androidterm" ]] || "$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/mkdir" -p "${chroot_root}/data/data/jackpal.androidterm" || exit 1
-[[ -e "${chroot_root}${chroot_root}" ]] || "$EPREFIX/lib/ld-linux-armhf.so.3" "$EPREFIX/bin/ln" -s "../../.." "${chroot_root}${chroot_root}" || exit 1
+[[ -d "${root}/data/data/jackpal.androidterm" ]] || "$EPREFIX/bin/mkdir" -p "${root}/data/data/jackpal.androidterm" || exit 1
+[[ -e "${root}${root}" ]] || "$EPREFIX/bin/ln" -s "../../.." "${root}${root}" || exit 1
 
-#fakechroot_lib="libfakechroot.so libdl.so.2 libreadline.so.7 libc.so.6 libncurses.so.6"
-fakechroot_lib="libfakechroot.so libdl.so.2"
-fakechroot_paths=/data/data/jackpal.androidterm/r/data/gentoo/home/chz100p/lib
+fakechroot_lib="libfakechroot.so"
+fakechroot_paths=/data/data/jackpal.androidterm/r/home/chz100p/lib/fakechroot
 
 fakechroot_paths="$fakechroot_paths${LD_LIBRARY_PATH:+${fakechroot_paths:+:}$LD_LIBRARY_PATH}"
 fakechroot_lib="$fakechroot_lib${LD_PRELOAD:+ $LD_PRELOAD}"
@@ -36,10 +33,8 @@ fakechroot_lib="$fakechroot_lib${LD_PRELOAD:+ $LD_PRELOAD}"
 
 LD_LIBRARY_PATH="$fakechroot_paths" LD_PRELOAD="$fakechroot_lib" \
 exec \
-"$EPREFIX/lib/ld-linux-armhf.so.3" \
 "$EPREFIX/bin/chroot" \
-"${chroot_root}" \
-"$EPREFIX/lib/ld-linux-armhf.so.3" \
+"${root}" \
 "$EPREFIX/bin/bash" \
 
 exit 1
