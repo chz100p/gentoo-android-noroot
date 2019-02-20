@@ -54,9 +54,9 @@ od -A n -t x1 -v "$1" \
 }
 
 prfx_patchtxt() {
- if grep -q "$prfx_orig" "$1" ; then
+ if grep -Eo "(${root})?${prfx_orig}" "$1" | grep -q "^${prfx_orig}\$" ; then
   echo "$@"
-  sed -i -e "s:$prfx_orig:${eprefix}:g" "$1" || exit 1
+  sed -i -e "s:${prfx_orig}:${eprefix}:g" -e "s:${root}${root}:${root}:g" "$1" || exit 1
  fi
 }
 
