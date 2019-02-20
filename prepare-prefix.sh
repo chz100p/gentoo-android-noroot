@@ -174,29 +174,20 @@ find ${eprefix} -type l ! -exec test -e {} \; -print | while read f ; do
  l="$(readlink -n "$f")"
  if [[ ${l#${prfx_orig}} != ${l} ]] ; then
   echo "$f"
-  ln -sf "${eprefix}${l#${prfx_orig}}" "$f" || exit 1
+  ln -sf "${root}${l}" "$f" || exit 1
  fi
 done
 
-##find usr/bin -type l | while read f;do if [[ $(basename $(readlink $f)) = "python-exec2" && -e "usr/lib/python-exec/python2.7/$(basename $f)" ]]; then echo $f; ln -sf "../lib/python-exec/python2.7/$(basename "$f")" "$f";fi;done^C
-##find usr/sbin -type l | while read f;do if [[ $(basename $(readlink $f)) = "python-exec2" && -e "usr/lib/python-exec/python2.7/$(basename $f)" ]]; then echo $f; ln -sf "../lib/python-exec/python2.7/$(basename "$f")" "$f";fi;done^C
-
-#find . -type f ! -path './usr/portage/*' ! -path './home/*' -print | while read f; do [[ $(file -b "$f") = *text* ]] && grep -q /data/gentoo "$f" && echo "$f"; done | tee log
-
-##find 'usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/' -type f | while read f;do if [[ $(patchelf --print-interpreter "$f") = "/data/gentoo/lib/ld-linux-armhf.so.3" ]]; then echo $f; patchbin-prfx "$f" "${f}.patched" "/data/gentoo/lib/ld-linux-armhf.so.3" "/data/data/jackpal.androidterm/g/ld-" || exit 1; mv "${f}.patched" "$f" || exit 1; chmod +x "$f" || exit 1; fi; done
 find "${eprefix}/usr/armv7a-hardfloat-linux-gnueabi/binutils-bin/2.30/" -type f \
 | while read f;do
   if strings "$f" | grep -q "${ld_linux_orig}"; then
-    echo $f
     prfx_patchbin "$f" "${f}.patched" "${ld_linux_orig}" "${ld_linux_prfx}" || exit 1
     mv "${f}.patched" "$f" || exit 1
     chmod +x "$f" || exit 1
   fi
 done
 
-##find . -type d -path ./usr/portage -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f | while read f;do if [[ $(file "$f") = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]];then echo $f;patchelf-prfx "$f";fi;done
-##find . -type d -path ./usr/portage -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f | while read f;do if [[ $(file "$f") = *text* && $(head -n 1 "$f") = '#!'*/data/gentoo/* ]];then echo $f;patchtxt-prfx "$f";fi;done
-find "${eprefix}" -type d -path "${eprefix}/usr/portage" -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f \
+find "${eprefix}" -path "${eprefix}/usr/portage" -prune -o -type f -name 'ld-*.so*' -prune -o -type f -name 'lib*.so*' -prune -o -type f -print \
 | while read f; do
   ff="$(file -b "$f")"
   if [[ $ff = *ELF*/data/gentoo/lib/ld-linux-armhf.so.3* ]]; then
