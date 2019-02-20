@@ -99,6 +99,8 @@ for d in bin etc home lib sbin tmp usr var; do
 done
 
 prfx_patchtxt "${eprefix}/etc/ld.so.conf"
+grep -q binutils "${eprefix}/etc/ld.so.conf" \
+|| echo "${eprefix}/usr/lib/binutils/armv7a-hardfloat-linux-gnueabi/2.30" >> "${eprefix}/etc/ld.so.conf"
 ${eprefix}/sbin/ldconfig -X -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so.cache"
 cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
 
