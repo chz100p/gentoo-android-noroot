@@ -106,7 +106,7 @@ ${eprefix}/sbin/ldconfig -f "${eprefix}/etc/ld.so.conf" -C "${eprefix}/etc/ld.so
 cp "${eprefix}/etc/ld.so.cache" "$prfx/etc/ld.so.cache"
 
 [[ -e "${ld_linux_prfx}" ]] \
- || prfx_patchbin "${ld_linux_orig}" "${ld_linux_prfx}" "/data/gentoo/etc" "/sdcard/prfx/etc" \
+ || prfx_patchbin "${root}${ld_linux_orig}" "${ld_linux_prfx}" "/data/gentoo/etc" "/sdcard/prfx/etc" \
  || exit 1
 [[ -x "$ld_linux_prfx" ]] || chmod +x "$ld_linux_prfx" || exit 1
 
@@ -115,6 +115,9 @@ if [[ ! -e "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" ]] ; then
  mv "${eprefix}/usr/lib/libmagic.so.1.0.0" "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" || exit 1
  prfx_patchbin \
   "${eprefix}/usr/lib/libmagic.so.1.0.0.orig" \
+  "${eprefix}/usr/lib/libmagic.so.1.0.0" \
+ || exit 1
+ chmod +x \
   "${eprefix}/usr/lib/libmagic.so.1.0.0" \
  || exit 1
 fi
