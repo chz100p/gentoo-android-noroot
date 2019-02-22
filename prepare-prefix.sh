@@ -93,6 +93,7 @@ if [[ ! -x "$ld_linux_prfx" ]]; then
 [[ -e "${root}/dev" ]] || mkdir -p "${root}/dev" || exit 1
 [[ -e "${root}/dev/null" ]] || ln -s "/dev/null" "${root}/dev/null" || exit 1
 [[ -e "${root}/dev/random" ]] || ln -s "/dev/random" "${root}/dev/random" || exit 1
+[[ -e "${root}/dev/urandom" ]] || ln -s "/dev/urandom" "${root}/dev/urandom" || exit 1
 [[ -e "${root}/dev/fd" ]] || ln -s "/proc/self/fd" "${root}/dev/fd" || exit 1
 for d in bin etc lib sbin tmp usr var; do
   [[ -e "${root}/${d}" ]] || ln -s "${eprefix#/}/${d}" "${root}/${d}" || exit 1
@@ -196,6 +197,12 @@ find "${eprefix}" -path "${eprefix}/usr/portage" -prune -o -type f -name 'ld-*.s
     prfx_patchtxt "$f"
   fi
 done
+
+#vi /data/data/jackpal.androidterm/r/usr/lib/python2.7/site-packages/_emerge/main.py
+#patchtxt-prfx /usr/lib/python2.7/site-packages/portage/const.py
+#patchtxt-prfx /usr/share/portage/config/make.globals
+#find / -type f -print | while read f; do if [[ $(grep -q -P "(?<"'!'"/data/data/jackpal.androidterm/r)/data/gentoo" $f; then echo $f; fi; done
+#/data/gentoo/etc/portage/repos.conf/gentoo.conf
 
 exit 0
 

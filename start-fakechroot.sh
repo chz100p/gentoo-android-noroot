@@ -1,6 +1,7 @@
 #!/system/bin/sh
 root="/data/data/jackpal.androidterm/r"
 export HOME="${root}/home/chz100p"
+export SHELL="${root}/data/gentoo/bin/bash"
 ld_linux="${root}/l/l"
 export EPREFIX="${root}/data/gentoo"
 unset LD_PRELOAD
