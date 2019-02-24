@@ -14,8 +14,18 @@ $HOME/bin\
 export TMPDIR="$EPREFIX/tmp"
 export TERMINFO="$EPREFIX/etc/terminfo"
 export TZ="GMT-9"
+export PERL5LIB="\
+${root}/etc/perl\
+:${root}/data/gentoo/usr/local/lib/perl5/5.26.1/armv7a-linux\
+:${root}/data/gentoo/usr/local/lib/perl5/5.26.1\
+:${root}/data/gentoo/usr/lib/perl5/vendor_perl/5.26.1/armv7a-linux\
+:${root}/data/gentoo/usr/lib/perl5/vendor_perl/5.26.1\
+:${root}/data/gentoo/usr/lib/perl5/5.26.1/armv7a-linux\
+:${root}/data/gentoo/usr/lib/perl5/5.26.1\
+"
 
-exec \
-"$EPREFIX/bin/bash" \
+exec "$EPREFIX/bin/bash" "$@"
 
 exit 1
+
+
